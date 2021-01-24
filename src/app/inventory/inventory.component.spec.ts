@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-
-import { InventoryComponent } from './inventory.component'
-import { MaterialModule } from '../material.module'
 import { RouterTestingModule } from '@angular/router/testing'
+
+import { MaterialModule } from '../material.module'
+import { InventoryComponent } from './inventory.component'
 
 describe('InventoryComponent', () => {
   let component: InventoryComponent

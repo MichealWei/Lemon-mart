@@ -1,37 +1,49 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing'
-import { TestBed } from '@angular/core/testing'
+import { TestBed, waitForAsync } from '@angular/core/testing'
 import { MediaObserver } from '@angular/flex-layout'
 import { MatIconRegistry } from '@angular/material/icon'
 import { DomSanitizer } from '@angular/platform-browser'
-import { RouterTestingModule } from '@angular/router/testing'
+import { ObservablePropertyStrategy, autoSpyObj } from 'angular-unit-test-helper'
 
 import { AppComponent } from './app.component'
+import { AuthService } from './auth/auth.service'
 import {
   DomSanitizerFake,
   MatIconRegistryFake,
   MediaObserverFake,
   commonTestingModules,
 } from './common/common.testing'
-import { MaterialModule } from './material.module'
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, MaterialModule, HttpClientTestingModule],
-      declarations: [AppComponent],
-    }).compileComponents()
-  })
+  beforeEach(
+    waitForAsync(() => {
+      const authServiceSpy = autoSpyObj(
+        AuthService,
+        ['authStatus$'],
+        ObservablePropertyStrategy.BehaviorSubject
+      )
+      TestBed.configureTestingModule({
+        imports: commonTestingModules,
+        providers: [
+          { provide: MediaObserver, useClass: MediaObserverFake },
+          { provide: MatIconRegistry, useClass: MatIconRegistryFake },
+          { provide: DomSanitizer, useClass: DomSanitizerFake },
+          { provide: AuthService, useValue: authServiceSpy },
+        ],
+        declarations: [AppComponent],
+      }).compileComponents()
+    })
+  )
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent)
-    const app = fixture.componentInstance
+    const app = fixture.debugElement.componentInstance
     expect(app).toBeTruthy()
   })
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent)
     fixture.detectChanges()
-    const compiled = fixture.nativeElement
-    expect(compiled.querySelector('.mat-h2').textContent).toContain('LemonMart')
+    const compiled = fixture.debugElement.nativeElement
+    expect(compiled.querySelector('span.mat-h2').textContent).toContain('LemonMart')
   })
 })
