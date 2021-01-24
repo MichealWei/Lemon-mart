@@ -29,8 +29,8 @@
     "docker:open": "sleep 2 && cross-conf-env open-cli http://localhost:$npm_package_config_imagePort",
     "docker:debugmessage": "echo Docker Debug Completed Successfully! Hit Ctrl+C to terminate log tailing.",
     "docker:debug": "run-s -cs docker:build docker:run docker:open docker:debugmessage docker:taillogs",
-    "test:prod": "npm test -- --browsers ChromiumNoSandbox --watch=false",
-    "test:coverage": "npm test -- --browsers ChromiumNoSandbox --watch=false --code-coverage",
+    "test:prod": "npm test -- --watch=false",
+    "test:coverage": "npm test -- --watch=false --code-coverage",
     "test": "ng test lemon-mart --browsers Chrome",
     "test:debug": "npm test -- --browsers Chrome --source-map",
     "test:prod:e2e": "npm run e2e"
