@@ -6,7 +6,7 @@ import { PhoneType, User } from '../user/user/user'
 import { Role } from './auth.enum'
 import { AuthService, IAuthStatus, IServerAuthResponse } from './auth.service'
 
-//For InMemoryAuthService only
+// For InMemoryAuthService only
 
 @Injectable()
 export class InMemoryAuthService extends AuthService {

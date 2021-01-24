@@ -33,6 +33,17 @@ export abstract class AuthService extends CacheService implements IAuthService {
   readonly authStatus$ = new BehaviorSubject<IAuthStatus>(defaultAuthStatus)
   readonly currentUser$ = new BehaviorSubject<IUser>(new User())
 
+  private getAndUpdateUserIfAuthenticated = pipe(
+    filter((status: IAuthStatus) => status.isAuthenticated),
+    mergeMap(() => this.getCurrentUser()),
+    map((user: IUser) => this.currentUser$.next(user)),
+    catchError(transformError)
+  )
+
+  protected readonly resumeCurrentUser$ = this.authStatus$.pipe(
+    this.getAndUpdateUserIfAuthenticated
+  )
+
   login(email: string, password: string): Observable<void> {
     this.clearToken()
 
@@ -93,17 +104,6 @@ export abstract class AuthService extends CacheService implements IAuthService {
   protected getAuthStatusFromToken(): IAuthStatus {
     return this.transformJwtToken(decode(this.getToken()))
   }
-
-  private getAndUpdateUserIfAuthenticated = pipe(
-    filter((status: IAuthStatus) => status.isAuthenticated),
-    mergeMap(() => this.getCurrentUser()),
-    map((user: IUser) => this.currentUser$.next(user)),
-    catchError(transformError)
-  )
-
-  protected readonly resumeCurrentUser$ = this.authStatus$.pipe(
-    this.getAndUpdateUserIfAuthenticated
-  )
 }
 
 export interface IAuthStatus {

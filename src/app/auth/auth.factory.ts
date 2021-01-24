@@ -4,7 +4,7 @@ import { AuthMode } from './auth.enum'
 import { InMemoryAuthService } from './auth.inmemory.service'
 
 export function authFactory() {
-  //afAuth: AngularFireAuth
+  // afAuth: AngularFireAuth
   switch (environment.authMode) {
     case AuthMode.InMemory:
       return new InMemoryAuthService()
